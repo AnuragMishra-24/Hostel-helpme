@@ -1,0 +1,113 @@
+/* ==========================================================================
+   Design tokens — the single place to change the look of Hostel HelpMe.
+   Components must reference these variables, never raw values.
+   ========================================================================== */
+:root {
+  /* Brand */
+  --primary: #1e3a8a;
+  --primary-hover: #172e6e;
+  --primary-active: #12255a;
+  --primary-soft: #eef2fb;
+  --primary-soft-border: #c9d4ee;
+  --on-primary: #ffffff;
+  --on-danger: #ffffff;
+  --scrim: rgba(15, 23, 42, 0.45);
+
+  /* Surfaces */
+  --background: #f5f6f8;
+  --surface: #ffffff;
+  --surface-subtle: #f8fafc;
+  --surface-hover: #f1f5f9;
+  --surface-muted: #eef1f5;
+
+  /* Text */
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+
+  /* Borders */
+  --border: #e2e8f0;
+  --border-strong: #cbd5e1;
+  --border-hover: #94a3b8;
+
+  /* Semantic */
+  --success: #15803d;
+  --success-soft: #ecfdf3;
+  --success-border: #b7e4c7;
+  --success-text: #166534;
+
+  --warning: #b45309;
+  --warning-soft: #fff7e8;
+  --warning-border: #f1d49b;
+  --warning-text: #92400e;
+
+  --danger: #b91c1c;
+  --danger-hover: #991b1b;
+  --danger-soft: #fef2f2;
+  --danger-border: #f3c1c1;
+  --danger-text: #991b1b;
+
+  --info: #1d4ed8;
+  --info-soft: #eff4ff;
+  --info-border: #c7d6f7;
+  --info-text: #1e40af;
+
+  /* Typography */
+  --font-sans: 'Inter Variable', 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --text-xs: 0.75rem;
+  --text-sm: 0.8125rem;
+  --text-base: 0.875rem;
+  --text-md: 0.9375rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.5rem;
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --leading-tight: 1.25;
+  --leading-normal: 1.5;
+
+  /* Spacing (4px base) */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+
+  /* Radius — deliberately small and consistent */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-full: 999px;
+
+  /* Shadows — subtle, used sparingly */
+  --shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.08), 0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.08), 0 1px 3px rgba(15, 23, 42, 0.06);
+  --shadow-lg: 0 12px 32px rgba(15, 23, 42, 0.14), 0 2px 6px rgba(15, 23, 42, 0.06);
+  --focus-ring: 0 0 0 3px rgba(30, 58, 138, 0.18);
+  --focus-ring-danger: 0 0 0 3px rgba(185, 28, 28, 0.16);
+
+  /* Motion */
+  --duration-fast: 120ms;
+  --duration-base: 180ms;
+  --duration-slow: 240ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Layout */
+  --sidebar-width: 16rem;
+  --header-height: 3.5rem;
+  --content-max: 75rem;
+
+  /* Stacking */
+  --z-header: 20;
+  --z-scrim: 30;
+  --z-sidebar: 40;
+  --z-dropdown: 50;
+  --z-modal: 60;
+  --z-toast: 70;
+}
