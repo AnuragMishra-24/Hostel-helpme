@@ -9,9 +9,14 @@ export const STATUS_META = Object.freeze({
   in_progress: { label: 'In progress', variant: 'primary' },
   resolved: { label: 'Resolved', variant: 'success' },
   closed: { label: 'Closed', variant: 'neutral' },
-  // Room-change requests
+  // Room-change requests and account approval
+  under_review: { label: 'Under review', variant: 'info' },
   approved: { label: 'Approved', variant: 'success' },
   rejected: { label: 'Rejected', variant: 'danger' },
+  // Fees (display only)
+  paid: { label: 'Paid', variant: 'success' },
+  partial: { label: 'Partially paid', variant: 'warning' },
+  unpaid: { label: 'Unpaid', variant: 'danger' },
 });
 
 export const PRIORITY_META = Object.freeze({

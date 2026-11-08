@@ -21,7 +21,7 @@ import Select from '@/components/forms/Select';
 import Textarea from '@/components/forms/Textarea';
 import { useToast } from '@/context/ToastContext';
 import { useAsync } from '@/hooks/useAsync';
-import { complaintService } from '@/services/complaintService';
+import { messService } from '@/services/messService';
 import { COMPLAINT_STATUSES, PRIORITIES } from '@/constants/status';
 import { BLOCKS } from '@/constants/hostel';
 import { PATHS } from '@/constants/roles';
@@ -63,7 +63,7 @@ export default function ComponentShowcase() {
   const [simulateError, setSimulateError] = useState(false);
 
   // Exercises UI → service → (mock | API) end to end, including error + retry.
-  const complaints = useAsync(() => complaintService.getComplaints({ simulateError }), [simulateError]);
+  const menu = useAsync(() => messService.getMenu({ simulateError }), [simulateError]);
 
   const confirmAction = () => {
     setConfirming(true);
@@ -168,17 +168,17 @@ export default function ComponentShowcase() {
           </div>
         </Section>
 
-        <Section title="Service layer" description="Fetched through complaintService, which uses the mock layer while VITE_USE_MOCK=true.">
+        <Section title="Service layer" description="Fetched through messService, which uses the mock layer while VITE_USE_MOCK=true.">
           <div className="stack">
             <div className="row">
               <Button size="sm" variant="secondary" onClick={() => setSimulateError((v) => !v)}>
                 {simulateError ? 'Request succeeds' : 'Simulate failed request'}
               </Button>
             </div>
-            {complaints.loading && <LoadingState label="Loading complaints…" />}
-            {complaints.error && <ErrorState title="Unable to load complaints" message={complaints.error.message} onRetry={complaints.reload} />}
-            {!complaints.loading && !complaints.error && complaints.data?.items.length === 0 && (
-              <EmptyState bordered icon={Search} title="No complaints found" description="The mock service returned an empty list." />
+            {menu.loading && <LoadingState label="Loading menu…" />}
+            {menu.error && <ErrorState title="Unable to load the menu" message={menu.error.message} onRetry={menu.reload} />}
+            {!menu.loading && !menu.error && menu.data && (
+              <EmptyState bordered icon={Search} title="Menu loaded" description={`The mock service returned ${menu.data.days.length} days.`} />
             )}
           </div>
         </Section>

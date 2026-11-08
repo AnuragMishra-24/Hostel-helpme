@@ -4,9 +4,9 @@ React frontend for Hostel HelpMe, a hostel management platform for **students**,
 The backend (Node/Express/MongoDB) does not exist yet. This app runs fully on an isolated mock layer and is built so the
 real API can be connected without touching UI code.
 
-**Current status: Phase 2 — Authentication & authorization (on top of the Phase 1 foundation).** OTP sign-in, student signup,
-warden verification (minimal), role-based route protection and logout, all on a mock backend. No feature modules
-(complaints, rooms, fees…) exist yet; their routes render a placeholder.
+**Current status: Phase 3 — Student module** (on top of Phase 1 foundation and Phase 2 authentication). Students have a working
+dashboard, complaints (with evidence upload, AI-suggestion display and status timeline), room-change requests, notices, fees,
+mess, rules and profile, all on a mock backend. Warden and Admin modules (other than warden verification) are still placeholders.
 
 ## Run it
 
@@ -88,6 +88,42 @@ Guards live in `src/routes/guards.jsx`. They are UX only — the backend must au
 
 `/dev/components` remains available in development for previewing shared components.
 
+## Student module (Phase 3)
+
+All student pages follow the same path: **page → service → `withMock(mock, api)`**. Pages never import `src/mock/`.
+
+| Route | Page | Service calls |
+| --- | --- | --- |
+| `/student/dashboard` | Overview: quick actions, complaint counts, room, room request, fee status, recent notices. Each card loads independently. | `complaintService.getSummary`, `studentService.getProfile`, `roomRequestService.getRequests`, `feeService.getMyFees`, `noticeService.getNotices` |
+| `/student/complaints` | List with search + status/priority/category filters (`?status=` pre-selects) | `complaintService.getComplaints` |
+| `/student/complaints/new` | Create form, 500-word limit, evidence uploader | `uploadEvidence`, `createComplaint` |
+| `/student/complaints/:id` | Detail, AI suggestions, evidence, technician, resolution, timeline | `getComplaint` |
+| `/student/room-request` | Current room, request form or open request, history | `roomRequestService.*`, `studentService.getProfile` |
+| `/student/notices` | Hostel-wide and own-block notices, tab filter | `noticeService.getNotices` |
+| `/student/fees` | **Display only** — there is no payment flow | `feeService.getMyFees` |
+| `/student/mess` | Weekly menu (today preselected) and meal timings | `messService.getMenu` |
+| `/student/rules` | Rule sections; anti-ragging shows "Coming soon" | `ruleService.getRules` |
+| `/student/profile` | Read-only personal, account and hostel details | `studentService.getProfile` |
+
+The expected request/response shape of every method is documented in the JSDoc at the top of its service file
+(`src/services/*Service.js`); endpoint paths are in `src/services/endpoints.js`. Phase 7 turns these into `API_CONTRACT.md`.
+
+**AI suggestions.** The backend is expected to return `complaint.ai = { suggestedCategory, suggestedPriority, priorityReason,
+simplifiedDescription }` (or `null` while pending) and `priorityStatus: 'suggested' | 'confirmed'`. The UI always labels these as
+suggestions; the warden decides. In mock mode `src/mock/ai.js` fakes this with a keyword heuristic — **there is no real AI**.
+
+**Evidence upload.** `FileUploader` only selects, validates (type, size, count) and previews files. The page uploads each file through
+`complaintService.uploadEvidence(file, { onProgress })` — expected to return `{ id, name, type, size, url }` — and then sends the
+returned metadata with `createComplaint`. In mock mode nothing leaves the browser: images are stored as small thumbnails, videos as
+metadata only. Limits live in `src/constants/complaints.js` (3 files, 20 MB each, JPG/PNG/WebP/MP4/WebM).
+
+**Mock data.** Complaints and room requests persist in `localStorage` (`hostel-helpme.mock.complaints`,
+`hostel-helpme.mock.roomRequests`); reset by removing those keys (and `hostel-helpme.mock.users` for accounts).
+The seeded student *Aarav Sharma* has block B, room 301, five complaints in every status, one past (rejected) room request and a
+part-paid fee. Other students have **no allocated room**, which exercises every empty state (e.g. approve *Ishita Verma* as the
+warden, then sign in as her). To see "Under review" or "Approved" on a room request, edit its `status` in the
+`hostel-helpme.mock.roomRequests` entry — only wardens can change it, and that UI is built in the Warden phase.
+
 ## Architecture
 
 ```
@@ -133,13 +169,15 @@ getComplaint: (id) => withMock(
 ```
 src/
 ├── components/
-│   ├── common/    Button, Card, Badge, StatusBadge, PriorityBadge, Modal, ConfirmationModal, Toast,
-│   │              Dropdown, Tabs, Table, SearchBar, PageHeader, Brand, EmptyState, ErrorState, LoadingState (+Skeleton)
-│   ├── forms/     FormField, Input, Select, Textarea
+│   ├── common/    Button, Card, Badge, StatusBadge, PriorityBadge, Alert, Modal, ConfirmationModal, Toast, Dropdown,
+│   │              Tabs, Table, SearchBar, PageHeader, Brand, DescriptionList, Timeline, AsyncBoundary,
+│   │              EmptyState, ErrorState, LoadingState (+Skeleton)
+│   ├── forms/     FormField, Input, Select, Textarea, OtpInput, FileUploader
 │   ├── layout/    AppShell, Sidebar, Header, AuthLayout
-│   ├── dashboard/ (reserved for later phases)
-│   └── complaints/(reserved for later phases)
-├── pages/         auth/ common/ dev/  (student/ warden/ admin/ are reserved for Phases 3–5)
+│   ├── dashboard/ student dashboard cards
+│   ├── complaints/ ComplaintFilters, AiSuggestionPanel, EvidenceGallery
+│   ├── notices/ roomRequests/  NoticeItem, RoomRequestCard
+├── pages/         auth/ common/ dev/ student/ warden/ (admin/ is reserved for Phase 5)
 ├── routes/        AppRoutes.jsx, guards.jsx, pageRegistry.js
 ├── services/      api.js, ApiError.js, endpoints.js, withMock.js, auth/complaint/room/notice/fee/mess services
 ├── mock/          mock implementations used by services only
@@ -170,5 +208,5 @@ Sidebar is fixed at ≥1024px; below that it is a slide-in drawer with focus tra
 `prefers-reduced-motion` disables animation.
 
 ## Not implemented yet
-Student modules (Phase 3) · warden modules (Phase 4) · admin modules (Phase 5) ·
-`FileUploader`, `Timeline` (Phase 3) · `Pagination`, `FilterBar` (Phase 4) · `API_CONTRACT.md` (Phase 7).
+Warden modules beyond verification (Phase 4) · admin modules (Phase 5) · `Pagination`, `FilterBar` (Phase 4) ·
+`API_CONTRACT.md` (Phase 7). Student lists are not paginated yet (the mock returns everything).

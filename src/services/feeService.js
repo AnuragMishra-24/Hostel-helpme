@@ -3,8 +3,11 @@ import { ENDPOINTS } from './endpoints';
 import { withMock } from './withMock';
 import * as mock from '@/mock/fees';
 
-// Phase 1: a single read method establishes the pattern. Methods are added
-// in the phase that builds the matching module.
+/**
+ * Display-only — there is no payment API.
+ * getMyFees() → { academicYear, roomType, totalAmount, paidAmount, remainingAmount,
+ *   status: 'paid'|'partial'|'unpaid', lastPaymentAt } | null
+ */
 export const feeService = {
   getMyFees: () =>
     withMock(

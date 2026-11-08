@@ -3,12 +3,14 @@ import { ENDPOINTS } from './endpoints';
 import { withMock } from './withMock';
 import * as mock from '@/mock/mess';
 
-// Phase 1: a single read method establishes the pattern. Methods are added
-// in the phase that builds the matching module.
+/**
+ * getMenu() → { effectiveFrom, timings: { breakfast, lunch, snacks, dinner }, notes,
+ *   days: [{ day: 'monday'…'sunday', meals: { breakfast: string[], lunch, snacks, dinner } }] }
+ */
 export const messService = {
-  getMenu: () =>
+  getMenu: (params) =>
     withMock(
-      () => mock.getMenu(),
+      () => mock.getMenu(params),
       () => http.get(ENDPOINTS.mess.menu),
     ),
 };

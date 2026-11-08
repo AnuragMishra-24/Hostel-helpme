@@ -3,8 +3,11 @@ import { ENDPOINTS } from './endpoints';
 import { withMock } from './withMock';
 import * as mock from '@/mock/notices';
 
-// Phase 1: a single read method establishes the pattern. Methods are added
-// in the phase that builds the matching module.
+/**
+ * getNotices({ limit? }) → { items: Notice[], page, pageSize, total }, newest first, already limited to what this
+ * student may see (hostel-wide + their block).
+ * Notice: { id, title, content, scope: 'hostel'|'block', block: 'A'|'B'|'C'|'D'|null, important, publishedAt }
+ */
 export const noticeService = {
   getNotices: (params) =>
     withMock(

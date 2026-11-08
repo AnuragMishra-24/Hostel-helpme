@@ -8,14 +8,15 @@ import VerifyOtpPage from '@/pages/auth/VerifyOtpPage';
 import NotFoundPage from '@/pages/common/NotFoundPage';
 import PlaceholderPage from '@/pages/common/PlaceholderPage';
 import ComponentShowcase from '@/pages/dev/ComponentShowcase';
-import { PAGE_REGISTRY } from './pageRegistry';
+import { EXTRA_PAGES, PAGE_REGISTRY } from './pageRegistry';
 import { AccountStatusRoute, GuestRoute, ProtectedRoute } from './guards';
 import { NAV_BY_ROLE } from '@/constants/navigation';
 import { PATHS, ROLES, ROLE_BASE_PATH, ROLE_HOME } from '@/constants/roles';
 import { IS_DEV } from '@/config/env';
 
 function renderRoleRoutes(role) {
-  return NAV_BY_ROLE[role].map((item) => {
+  const extras = (EXTRA_PAGES[role] ?? []).map(({ path, Page }) => <Route key={path} path={path} element={<Page />} />);
+  const navRoutes = NAV_BY_ROLE[role].map((item) => {
     const Page = PAGE_REGISTRY[role]?.[item.key];
     const slug = item.path.slice(ROLE_BASE_PATH[role].length + 1);
     return (
@@ -26,6 +27,7 @@ function renderRoleRoutes(role) {
       />
     );
   });
+  return [...navRoutes, ...extras];
 }
 
 // Guards live in ./guards: GuestRoute (auth pages), AccountStatusRoute (unapproved users)

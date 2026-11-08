@@ -39,3 +39,8 @@ export function validateEnrollment(value) {
   if (!value.trim()) return 'Enter your enrollment number.';
   return ENROLLMENT_PATTERN.test(value.trim()) ? '' : 'Use 4–20 letters, numbers, hyphens or slashes.';
 }
+
+export function countWords(text) {
+  const trimmed = text.trim();
+  return trimmed ? trimmed.split(/\s+/).length : 0;
+}

@@ -1,7 +1,8 @@
 import { cn } from '@/utils/cn';
 
 /**
- * columns: [{ key, header, render?: (row) => node }]
+ * columns: [{ key, header, render?: (row) => node, primary?: boolean }]
+ * A `primary` column (e.g. a title) is shown unlabelled and full width when rows stack.
  * On screens under 720px each row becomes a labelled stack instead of a squeezed table.
  */
 export default function Table({ columns, rows, rowKey = 'id', onRowClick, caption, emptyState }) {
@@ -26,7 +27,7 @@ export default function Table({ columns, rows, rowKey = 'id', onRowClick, captio
               onKeyDown={onRowClick ? (event) => { if (event.key === 'Enter') onRowClick(row); } : undefined}
             >
               {columns.map((col) => (
-                <td key={col.key} data-label={col.header}>{col.render ? col.render(row) : row[col.key]}</td>
+                <td key={col.key} data-label={col.header} className={col.primary ? 'table__cell--primary' : undefined}>{col.render ? col.render(row) : row[col.key]}</td>
               ))}
             </tr>
           ))}

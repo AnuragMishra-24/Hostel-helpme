@@ -29,3 +29,13 @@ export const PATHS = Object.freeze({
   ACCOUNT_STATUS: '/account-status',
   COMPONENT_SHOWCASE: '/dev/components',
 });
+
+export const STUDENT_PATHS = Object.freeze({
+  dashboard: '/student/dashboard',
+  complaints: '/student/complaints',
+  newComplaint: '/student/complaints/new',
+  complaint: (id) => `/student/complaints/${id}`,
+  roomRequest: '/student/room-request',
+  fees: '/student/fees',
+  notices: '/student/notices',
+});
